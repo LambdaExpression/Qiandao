@@ -15,7 +15,7 @@
       
     |-- cookies
       
-      |-- baidu.txt
+      |-- baidu.txt  # baidu cookie配置
       
   |-- logs
   
