@@ -165,10 +165,12 @@ do
     bar_kw=`echo ${bar_kw#*=}`
     bar_title=`echo $bar_data |grep -Eo 'title="[^"]+'`
     bar_title=${bar_title#*\"}
-    bar_sign_url=$SIGN_URL"?ie=utf-8&kw=$bar_kw"
+    bar_sign_url=$SIGN_URL
+    bar_sign_data="ie=utf-8&kw=$bar_title"
 
-    bar_sign_result=`curl $bar_sign_url -X POST -H "Cookie:$COOKIE" -H "DNT:1" -H "Accept-Language:zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7" -H "User-Agent:LogStatistic" -H "Accept:application/json, text/javascript, */*; q=0.01" -H "Connection:keep-alive" -H "Host:tieba.baidu.com" -H "Upgrade-Insecure-Requests:1" -s |iconv -f gb2312 -t utf-8//TRANSLIT`
+    bar_sign_result=`curl -d "$bar_sign_data"  $bar_sign_url -X POST -H "Cookie:$COOKIE" -H "DNT:1" -H "Accept-Language:zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7" -H "User-Agent:LogStatistic" -H "Accept:application/json, text/javascript, */*; q=0.01" -H "Connection:keep-alive" -H "Host:tieba.baidu.com" -H "Upgrade-Insecure-Requests:1" -s |iconv -f gb2312 -t utf-8//TRANSLIT`
 
+    bar_sign_result=`echo -e $bar_sign_result`
     # echo $bar_sign_result
 
     bar_sign_result_code=${bar_sign_result#*:}
@@ -181,7 +183,7 @@ do
         log $LOG_TYPE_BAIDU, $LOG_LEVEL_INFO, $bar_title" 签到完成"
     else
         let sign_fail_count+=1
-        log $LOG_TYPE_BAIDU, $LOG_LEVEL_WARN, $bar_title" 签到失败"
+        log $LOG_TYPE_BAIDU, $LOG_LEVEL_WARN, $bar_title" 签到失败 "$bar_sign_data" "$bar_sign_result
     fi
     
 done < ${BAIDU_TEMP_PATH}bar_data.txt
