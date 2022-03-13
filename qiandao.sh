@@ -183,7 +183,7 @@ do
         log $LOG_TYPE_BAIDU, $LOG_LEVEL_INFO, $bar_title" 签到完成"
     else
         let sign_fail_count+=1
-        log $LOG_TYPE_BAIDU, $LOG_LEVEL_WARN, $bar_title" 签到失败 "$bar_sign_data" "$bar_sign_result
+        log $LOG_TYPE_BAIDU, $LOG_LEVEL_WARN, $bar_title" 签到失败 "$bar_sign_result
     fi
     
 done < ${BAIDU_TEMP_PATH}bar_data.txt
